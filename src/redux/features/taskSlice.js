@@ -7,6 +7,8 @@ const taskSlice = createSlice({
     isModalOpen: false,
     isDeleteModal: false,
     isEditing: false,
+    editId: "",
+    deleteId: "",
   },
   reducers: {
     setModelOpen: (state, action) => {
@@ -55,6 +57,17 @@ const taskSlice = createSlice({
         state.allTasks.sort().reverse();
       }
     },
+    setEditId: (state, action) => {
+      state.editId = action.payload;
+    },
+    setDeleteId: (state, action) => {
+      state.deleteId = action.payload;
+    },
+    setDelete: (state, action) => {
+      state.allTasks = state.allTasks.filter(
+        (task) => task.id !== action.payload
+      );
+    },
   },
 });
 
@@ -67,4 +80,7 @@ export const {
   setSearchByTitle,
   setSort,
   setIsEditing,
+  setEditId,
+  setDeleteId,
+  setDelete,
 } = taskSlice.actions;

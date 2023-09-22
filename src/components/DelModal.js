@@ -1,10 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { setDeleteModal } from "../redux/features/taskSlice";
+import { setDelete, setDeleteModal } from "../redux/features/taskSlice";
 import { useDispatch } from "react-redux";
 
 const DelModal = () => {
-  const { isDeleteModal } = useSelector((state) => state.tasks);
+  const { isDeleteModal, deleteId } = useSelector((state) => state.tasks);
   const dispatch = useDispatch();
 
   return (
@@ -36,6 +36,10 @@ const DelModal = () => {
                     Cancel
                   </p>
                   <button
+                    onClick={() => {
+                      dispatch(setDelete(deleteId));
+                      dispatch(setDeleteModal(false));
+                    }}
                     className="w-[5rem] h-[2rem] bg-violet-500  rounded-md  text-white"
                     type="button"
                   >

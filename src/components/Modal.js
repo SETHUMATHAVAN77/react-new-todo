@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { setAllTasks, setModelOpen } from "../redux/features/taskSlice";
 import { useDispatch } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
 
 const initialState = {
   title: "",
@@ -12,12 +13,20 @@ const initialState = {
 };
 
 const Modal = () => {
-  const { isModalOpen, allTasks, isEditing } = useSelector(
+  const { isModalOpen, allTasks, isEditing, editId } = useSelector(
     (state) => state.tasks
   );
   const [formValue, setFormValue] = useState(initialState);
   const { title, date, description, isCompleted, isImportant } = formValue;
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (editId) {
+      const singleTask = allTasks.find((task) => task.id === editId);
+      setFormValue({ ...singleTask });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editId]);
 
   const clearForm = () => {
     setFormValue({
@@ -31,9 +40,15 @@ const Modal = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (title && date && description) {
-      dispatch(setAllTasks({ ...formValue, title, date, description }));
-      dispatch(setModelOpen(false));
+      if (isEditing && editId) {
+        dispatch(setAllTasks({ id: editId, title, date, description }));
+        dispatch(setModelOpen(false));
+      } else {
+        dispatch(setAllTasks({ id: uuidv4(), title, date, description }));
+        dispatch(setModelOpen(false));
+      }
       clearForm();
     }
   };
@@ -49,7 +64,7 @@ const Modal = () => {
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-slate-100 outline-none focus:outline-none px-6 py-4">
                 <div className="flex items-center justify-between w-full">
                   <p className="font-bold text-slate-600">
-                    {isEditing ? "Edit a task" : "Add a task"}
+                    {isEditing ? "Edit task" : "Add task"}
                   </p>
                   <button
                     onClick={() => dispatch(setModelOpen(false))}
@@ -147,7 +162,7 @@ const Modal = () => {
                       className="w-full py-2 font-semibold hover:bg-violet-600 transition-all duration-200 bg-violet-500  rounded-md  text-white"
                       type="submit"
                     >
-                      {isEditing ? "Edit a task" : "Add a task"}
+                      {isEditing ? "Edit task" : "Add task"}
                     </button>
                   </div>
                 </form>

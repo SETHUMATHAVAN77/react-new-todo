@@ -5,7 +5,9 @@ import { BiSolidStar } from "react-icons/bi";
 import { RiDeleteBinFill } from "react-icons/ri";
 import { SlOptionsVertical } from "react-icons/sl";
 import {
+  setDeleteId,
   setDeleteModal,
+  setEditId,
   setIsEditing,
   setModelOpen,
 } from "../redux/features/taskSlice";
@@ -15,9 +17,10 @@ const Cart = () => {
   const dispatch = useDispatch();
   const { allTasks } = useSelector((state) => state.tasks);
 
-  const handleClick = () => {
+  const handleClick = (id) => {
     dispatch(setModelOpen(true));
     dispatch(setIsEditing(true));
+    dispatch(setEditId(id));
   };
 
   return (
@@ -25,9 +28,13 @@ const Cart = () => {
       {allTasks?.length > 0 ? (
         <div className="flex items-center gap-2 justify-center flex-wrap">
           {allTasks.map((task) => {
-            const { title, description, date, isCompleted, isImportant } = task;
+            const { id, title, description, date, isCompleted, isImportant } =
+              task;
             return (
-              <div className="w-[17rem] h-[12rem] bg-slate-100 p-2 border rounded-md group transition-all duration-200 hover:bg-violet-400">
+              <div
+                key={id}
+                className="w-[17rem] h-[12rem] bg-slate-100 p-2 border rounded-md group transition-all duration-200 hover:bg-violet-400"
+              >
                 <div className="ml-3 space-y-2">
                   <h3 className="text-slate-600 font-medium ">{title}</h3>
                   <p className="text-slate-400 group-hover:text-white">
@@ -58,11 +65,16 @@ const Cart = () => {
                     >
                       {isImportant ? <BiSolidStar /> : <FaRegStar />}
                     </button>
-                    <button onClick={() => dispatch(setDeleteModal(true))}>
+                    <button
+                      onClick={() => {
+                        dispatch(setDeleteModal(true));
+                        dispatch(setDeleteId(id));
+                      }}
+                    >
                       <RiDeleteBinFill />
                     </button>
 
-                    <button onClick={handleClick}>
+                    <button onClick={() => handleClick(id)}>
                       <SlOptionsVertical />
                     </button>
                   </div>

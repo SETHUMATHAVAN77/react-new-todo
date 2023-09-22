@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { setCategory, setModelOpen } from "../redux/features/taskSlice";
+import {
+  setCategory,
+  setIsEditing,
+  setModelOpen,
+} from "../redux/features/taskSlice";
 import { useDispatch } from "react-redux";
 
 const category = [
@@ -25,7 +29,10 @@ const Title = () => {
           TO-DO-LIST
         </div>
         <button
-          onClick={() => dispatch(setModelOpen(true))}
+          onClick={() => {
+            dispatch(setModelOpen(true));
+            dispatch(setIsEditing(false));
+          }}
           className="mt-8 mb-8 ml-3.5 w-[11rem] h-[3rem] bg-violet-500  rounded-md  text-white"
         >
           Add new task
