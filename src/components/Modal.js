@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { setAllTasks, setModelOpen } from "../redux/features/taskSlice";
+import {
+  setAllTasks,
+  setEditId,
+  setEditTask,
+  setIsEditing,
+  setModelOpen,
+} from "../redux/features/taskSlice";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 
@@ -40,13 +46,14 @@ const Modal = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (title && date && description) {
       if (isEditing && editId) {
         dispatch(
-          setAllTasks({ ...formValue, id: editId, title, date, description })
+          setEditTask({ ...formValue, id: editId, title, date, description })
         );
         dispatch(setModelOpen(false));
+        dispatch(setEditId(null));
+        dispatch(setIsEditing(false));
       } else {
         dispatch(
           setAllTasks({ ...formValue, id: uuidv4(), title, date, description })

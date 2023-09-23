@@ -24,6 +24,11 @@ const taskSlice = createSlice({
       const newAllTasks = [...state.allTasks, action.payload];
       state.allTasks = newAllTasks;
     },
+    setEditTask: (state, action) => {
+      state.allTasks = state.allTasks.map((task) =>
+        task.id === action.payload.id ? action.payload : task
+      );
+    },
     setCategory: (state, action) => {
       const category = action.payload;
       const copy = [...state.allTasks];
@@ -83,4 +88,5 @@ export const {
   setEditId,
   setDeleteId,
   setDelete,
+  setEditTask,
 } = taskSlice.actions;
