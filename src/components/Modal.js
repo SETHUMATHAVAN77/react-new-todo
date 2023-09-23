@@ -43,10 +43,14 @@ const Modal = () => {
 
     if (title && date && description) {
       if (isEditing && editId) {
-        dispatch(setAllTasks({ id: editId, title, date, description }));
+        dispatch(
+          setAllTasks({ ...formValue, id: editId, title, date, description })
+        );
         dispatch(setModelOpen(false));
       } else {
-        dispatch(setAllTasks({ id: uuidv4(), title, date, description }));
+        dispatch(
+          setAllTasks({ ...formValue, id: uuidv4(), title, date, description })
+        );
         dispatch(setModelOpen(false));
       }
       clearForm();
