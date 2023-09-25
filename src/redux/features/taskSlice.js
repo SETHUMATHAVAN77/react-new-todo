@@ -36,7 +36,7 @@ const taskSlice = createSlice({
         state.originalTasks = [...state.allTasks];
       }
 
-      let filteredTasks = [...state.originalTasks]; // Start with the original tasks
+      let filteredTasks = state.originalTasks.slice(); // Start with a copy of the original tasks
 
       if (category === "Important Tasks") {
         filteredTasks = filteredTasks.filter(
@@ -46,7 +46,7 @@ const taskSlice = createSlice({
         filteredTasks = filteredTasks.filter(
           (task) => task.isCompleted === true
         );
-      } else if (category === "UnCompleted Tasks") {
+      } else if (category === "Uncompleted Tasks") {
         filteredTasks = filteredTasks.filter(
           (task) => task.isCompleted === false
         );
