@@ -31,22 +31,30 @@ const taskSlice = createSlice({
     },
     setCategory: (state, action) => {
       const category = action.payload;
-      const copy = [...state.allTasks];
+
+      if (!state.originalTasks) {
+        state.originalTasks = [...state.allTasks];
+      }
+
+      let filteredTasks = [...state.originalTasks]; // Start with the original tasks
+
       if (category === "Important Tasks") {
-        const importantTasks = copy.filter((task) => task.isImportant === true);
-        state.allTasks = importantTasks;
+        filteredTasks = filteredTasks.filter(
+          (task) => task.isImportant === true
+        );
       } else if (category === "Completed Tasks") {
-        const completedTasks = copy.filter((task) => task.isCompleted === true);
-        state.allTasks = completedTasks;
-      } else if (category === "Completed Tasks") {
-        const completedTasks = copy.filter(
+        filteredTasks = filteredTasks.filter(
+          (task) => task.isCompleted === true
+        );
+      } else if (category === "UnCompleted Tasks") {
+        filteredTasks = filteredTasks.filter(
           (task) => task.isCompleted === false
         );
-        state.allTasks = completedTasks;
-      } else {
-        state.allTasks = copy;
       }
+
+      state.allTasks = filteredTasks;
     },
+
     setSearchByTitle: (state, action) => {
       const searchQuery = action.payload.toLowerCase();
       const filteredTasks = state.allTasks.filter((task) =>

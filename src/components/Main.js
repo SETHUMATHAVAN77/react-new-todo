@@ -38,7 +38,7 @@ const Main = () => {
               </button>
             </div>
           </div>
-          <div className="mr-5 mt-3">2023,Sep 22</div>
+          <div className="mr-5 mt-3">{`${new Date().toLocaleDateString()}`}</div>
           <div>
             <button
               onClick={() => dispatch(setModelOpen(true))}
